@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tcl.work.sport.mapper.UserMapper">
+    <insert id="addUser" parameterType="com.tcl.work.sport.model.User">
+        INSERT INTO sport_db0.user(
+          name,
+          password,
+          join_time,
+          update_time,
+          session,
+          phone,
+          image_url,
+          retain,
+          im_uid
+        )VALUES (
+          #{name},
+          #{password},
+          #{join_time},
+          #{update_time},
+          #{session},
+          #{phone},
+          #{image_url},
+          #{retain},
+          #{im_uid}
+        )
+    </insert>
+
+    <select id="getAllSessions" resultType="com.tcl.work.sport.model.User">
+        SELECT id, session FROM sport_db0.user;
+    </select>
+
+    <select id="checkUser" resultType="com.tcl.work.sport.model.User" parameterType="com.tcl.work.sport.model.User">
+        SELECT id,
+          name,
+         session,
+         image_url,
+         im_uid
+        FROM sport_db0.user
+        WHERE phone = #{phone}
+        AND password = #{password}
+    </select>
+
+    <select id="checkPhone" resultType="int" parameterType="string">
+        SELECT COUNT(*)
+        FROM sport_db0.user
+        WHERE phone = #{phone}
+    </select>
+
+</mapper> 

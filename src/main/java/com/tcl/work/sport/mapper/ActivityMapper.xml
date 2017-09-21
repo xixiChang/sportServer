@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace= "com.tcl.work.sport.mapper.ActivityMapper">
+    <insert id="addActivity" parameterType="com.tcl.work.sport.model.Activity">
+        insert into sport_db0.activity (
+          id,
+          publish_user_id,
+          topic,
+          time,
+          end_time,
+          publish_time,
+          address,
+          count,
+          content,
+          status,
+          image_url,
+          goal_dis,
+          lltude,
+          retain
+        ) values (
+          #{id},
+          #{publish_user_id},
+          #{topic},
+          #{time},
+          #{end_time},
+          #{publish_time},
+          #{address},
+          #{count},
+          #{content},
+          0,
+          #{image_url},
+          #{goal_dis},
+          #{lltude},
+          #{retain}
+        );
+    </insert>
+
+    <update id="updateActivityTime" parameterType="com.tcl.work.sport.model.Activity">
+        update  sport_db0.activity
+        set time = #{time},
+            end_time = #{end_time},
+            status = #{status},
+            reason = #{reason}
+        where id = #{id};
+    </update>
+
+    <update id="cancelActivity" parameterType="com.tcl.work.sport.model.Activity">
+        update  sport_db0.activity
+        set status = #{status},
+          reason = #{reason}
+        where id = #{id};
+    </update>
+
+
+
+</mapper>
