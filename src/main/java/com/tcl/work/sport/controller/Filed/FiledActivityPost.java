@@ -23,6 +23,16 @@ public class FiledActivityPost {
     @NotEmpty (message = "instruction is null")
     private String instruction;
 
+    private String note;
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
     private int count;
 
     public int getCount() {

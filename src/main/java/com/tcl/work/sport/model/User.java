@@ -8,15 +8,15 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
     private int id;
-    private String name;//r
-    private String password;//r
-    private Date join_time;//r
+    private String name;
+    private String password;
+    private Date join_time;
     private Date update_time;
-    private String session;//r
-    private String phone;//r
+    private String session;
+    private String phone;
     private String image_url;
     private String retain;
-    private String im_uid;//r
+    private String im_uid;
 
     public void setJoin_time(Date join_time) {
         this.join_time = join_time;

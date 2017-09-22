@@ -3,13 +3,14 @@ package com.tcl.work.sport.service;
 import com.tcl.work.sport.ApplicationContext;
 import com.tcl.work.sport.mapper.UserMapper;
 import com.tcl.work.sport.model.User;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Calendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 @Service
 public class AppInitial {
@@ -24,6 +25,6 @@ public class AppInitial {
         for (User user:users){
             ApplicationContext.UserSessions.put(user.getId(), user.getSession());
         }
-        logger.log(Level.INFO, ApplicationContext.UserSessions.size() + "");
+        logger.debug(users.size());
     }
 }

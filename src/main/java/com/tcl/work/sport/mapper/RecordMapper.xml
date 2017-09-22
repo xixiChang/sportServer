@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tcl.work.sport.mapper.RecordMapper">
+    <insert id="addRecord" parameterType="com.tcl.work.sport.model.Record">
+        insert into sport_db0.record (
+          user_id,
+          date,
+          time,
+          type,
+          step,
+          distance,
+          calorie,
+          mean_speed,
+          spent_time,
+          start_time,
+          end_time
+        ) values (
+          #{user_id},
+          #{date},
+          #{time},
+          #{type},
+          #{step},
+          #{distance},
+          #{calorie},
+          #{mean_speed},
+          #{spent_time},
+          #{start_time},
+          #{end_time}
+        );
+    </insert>
+
+    <select id="getRecordMaxForDay" parameterType="map" resultType="map">
+      SELECT
+        *
+      FROM
+      (SELECT
+        user_id, date, SUM(step) AS step
+       FROM
+        sport_db0.record
+       WHERE
+        type = #{type} AND user_id = #{user_id}
+        GROUP BY date) t1
+      WHERE
+        step = (SELECT
+            MAX(step)
+        FROM
+            (SELECT
+                SUM(step) AS step
+            FROM
+                sport_db0.record
+            WHERE
+                type = #{type} AND user_id = #{user_id}
+            GROUP BY date) t2)
+    </select>
+
+    <select id="getRecordMax" parameterType="map" resultType="map">
+        SELECT
+          id, user_id, MAX(step) AS step, spent_time, distance, calorie
+        FROM
+          sport_db0.record
+        WHERE
+          type = #{type} AND user_id = #{user_id}
+        LIMIT 1;
+    </select>
+
+    <select id="getRecordDetails" parameterType="int" resultType="com.tcl.work.sport.model.Record">
+        SELECT * FROM sport_db0.record WHERE id = #{id}
+    </select>
+
+    <select id="getRecordDayAll" parameterType="map" resultType="com.tcl.work.sport.model.Record">
+        SELECT
+          *
+        FROM
+          sport_db0.record
+        WHERE
+          user_id = #{user_id} AND date = #{date};
+    </select>
+
+    <select id="getRecordHistoryWeekly" parameterType="int" resultType="map">
+        SELECT
+          week(date) AS week, SUM(step) AS step
+        FROM
+          sport_db0.record
+        WHERE
+          user_id = #{user_id}
+        GROUP BY
+          WEEK(date);
+    </select>
+
+    <select id="getRecordHistoryMonthly" parameterType="int" resultType="map">
+        SELECT
+          MONTH (date) AS month, sum(step) AS step
+        FROM
+          sport_db0.record
+        WHERE
+          user_id = #{user_id}
+        GROUP BY
+          MONTH(date);
+    </select>
+
+    <select id="getRecordSUM" parameterType="int" resultType="map">
+        SELECT
+          sum(step) AS step, sum(distance) AS distance, sum(spent_time) AS spent_time,
+          sum(calorie) AS calorie
+        FROM
+          sport_db0.record
+        WHERE
+          user_id = #{user_id};
+    </select>
+
+    <select id="getRating" parameterType="int" resultType="com.tcl.work.sport.model.RateItem">
+        SELECT
+          name AS name , retain, image_url, u.id AS user_id, sum(step) AS step
+        FROM
+          sport_db0.user u
+        JOIN
+          sport_db0.record r
+        ON
+          u.id = r.user_id
+        WHERE
+          r.user_id in
+          <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+        AND
+          date = current_date()
+        GROUP BY
+          user_id
+        ORDER BY
+          step
+        DESC
+    </select>
+</mapper>

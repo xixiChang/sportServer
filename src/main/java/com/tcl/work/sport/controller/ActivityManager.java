@@ -9,6 +9,7 @@ import com.tcl.work.sport.utils.TimeTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -18,13 +19,14 @@ import static com.tcl.work.sport.constant.Constant.OK;
 /**
  * Created by Emcc on 17-9-19.
  */
-@RestController(value = "/activity")
+@RestController
+@RequestMapping("/activity")
 public class ActivityManager {
 
     @Autowired
     private ActivityMapper activityMapper;
 
-    @PostMapping(value = "/post")
+    @PostMapping(path = "/post")
     public ResponseResult postActivity(@Valid FiledActivityPost activityFiled,
                                        BindingResult binding){
         ResponseResult responseResult = new ResponseResult();

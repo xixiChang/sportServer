@@ -16,7 +16,8 @@
           image_url,
           goal_dis,
           lltude,
-          retain
+          retain,
+          note
         ) values (
           #{id},
           #{publish_user_id},
@@ -31,7 +32,8 @@
           #{image_url},
           #{goal_dis},
           #{lltude},
-          #{retain}
+          #{retain},
+          #{note}
         );
     </insert>
 
@@ -50,7 +52,4 @@
           reason = #{reason}
         where id = #{id};
     </update>
-
-
-
 </mapper>
