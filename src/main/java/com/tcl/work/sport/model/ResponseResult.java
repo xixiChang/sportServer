@@ -9,6 +9,7 @@ public class ResponseResult {
     private String status = FAULT;
     private String msg = "";
     private Object result;
+    private String type;
 
     public String getStatus() {
         return status;
@@ -32,5 +33,13 @@ public class ResponseResult {
 
     public void setResult(Object result) {
         this.result = result;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

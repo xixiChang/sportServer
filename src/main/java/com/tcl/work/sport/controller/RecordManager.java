@@ -31,11 +31,14 @@ public class RecordManager {
     private RecordMapper recordMapper;
 
     @RequestMapping(path = "/upload")
-    public ResponseResult uploadRecord(@Valid Record record, BindingResult binding){
+    public ResponseResult uploadRecord(@RequestBody @Valid Record record,
+                                       BindingResult binding){
         ResponseResult responseResult = new ResponseResult();
         if (binding.hasErrors()){
             responseResult.setMsg(GetString.errorInfo(binding.getAllErrors()));
+            return responseResult;
         }
+        logger.debug(record.toString());
         if (recordMapper.addRecord(record) > 0)
             responseResult.setStatus(OK);
         return responseResult;
@@ -44,6 +47,9 @@ public class RecordManager {
     @RequestMapping(path = "/query/{cmd}")
     public ResponseResult queryRecord(@PathVariable String cmd, FiledRecordQuery filed){
         ResponseResult responseResult = new ResponseResult();
+        responseResult.setMsg(cmd);
+        if (filed.getType() != null)
+            responseResult.setType(filed.getType());
         switch (cmd){
             case "sum":
                 responseResult.setResult(recordMapper.getRecordSUM(filed.getUser_id()));
@@ -101,7 +107,6 @@ public class RecordManager {
         ResponseResult responseResult = new ResponseResult();
         responseResult.setResult(recordMapper.getRating(friendList));
         responseResult.setStatus(OK);
-
 
         return responseResult;
     }

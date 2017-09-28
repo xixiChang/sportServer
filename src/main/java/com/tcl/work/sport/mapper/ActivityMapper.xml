@@ -1,55 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace= "com.tcl.work.sport.mapper.ActivityMapper">
-    <insert id="addActivity" parameterType="com.tcl.work.sport.model.Activity">
+    <insert id="addActivity" parameterType="com.tcl.work.sport.model.Activity"
+            useGeneratedKeys="true" keyProperty="id">
         insert into sport_db0.activity (
-          id,
-          publish_user_id,
-          topic,
-          time,
-          end_time,
-          publish_time,
-          address,
-          count,
-          content,
-          status,
-          image_url,
-          goal_dis,
-          lltude,
-          retain,
-          note
+            image_url,
+            publish_user_id,
+            name,
+            details,
+            start_time,
+            end_time,
+            address,
+            distance,
+            notes,
+            join_num_all
         ) values (
-          #{id},
-          #{publish_user_id},
-          #{topic},
-          #{time},
-          #{end_time},
-          #{publish_time},
-          #{address},
-          #{count},
-          #{content},
-          0,
-          #{image_url},
-          #{goal_dis},
-          #{lltude},
-          #{retain},
-          #{note}
+            #{image_url},
+            #{publish_user_id},
+            #{name},
+            #{details},
+            #{start_time},
+            #{end_time},
+            #{address},
+            #{distance},
+            #{notes},
+            #{join_num_all}
         );
+
     </insert>
 
-    <update id="updateActivityTime" parameterType="com.tcl.work.sport.model.Activity">
+    <update id="updateActivityTime" parameterType="com.tcl.work.sport.controller.Filed.FiledActivityDelay">
         update  sport_db0.activity
-        set time = #{time},
+        set start_time = #{start_time},
             end_time = #{end_time},
-            status = #{status},
+            status = 1,
             reason = #{reason}
-        where id = #{id};
+        where id = #{at_server_id};
     </update>
 
-    <update id="cancelActivity" parameterType="com.tcl.work.sport.model.Activity">
+    <update id="cancelActivity" parameterType="map">
         update  sport_db0.activity
-        set status = #{status},
+        set status = 3,
           reason = #{reason}
-        where id = #{id};
+        where id = #{at_server_id};
+    </update>
+
+    <select id="getDetails" parameterType="int"  resultType="com.tcl.work.sport.model.Activity">
+        select
+         *
+        from
+         sport_db0.activity
+        where id = #{at_server_id};
+
+        update sport_db0.activity
+        set
+            click_count = click_count + 1,
+            hot_value = hot_value + click_count * 15
+        where id = #{at_server_id};
+    </select>
+
+    <select id="getJoiner" parameterType="int" resultType="int">
+        select user_id
+        from sport_db0.user_join_activity
+        where activity_id = #{at_server_id};
+    </select>
+
+    <select id="getListForSB" parameterType="int" resultType="com.tcl.work.sport.model.ActivityBriefInfo">
+        select
+            image_url,
+            publish_user_id,
+            name,
+            start_time,
+            end_time,
+            status,
+            id as at_server_id,
+            hot_value,
+            post_time
+        from
+            sport_db0.activity a
+        left join sport_db0.user_join_activity j
+            on a.id = j.activity_id
+        where
+            j.user_id = #{user_id};
+
+    </select>
+
+    <select id="getAllActivity" resultType="com.tcl.work.sport.model.ActivityBriefInfo">
+        select
+            image_url,
+            publish_user_id,
+            name,
+            start_time,
+            end_time,
+            status,
+            id as at_server_id,
+            hot_value,
+            post_time
+        from
+            sport_db0.activity
+        where status &lt; 2;
+    </select>
+
+    <update id="joinActivity" parameterType="map">
+        update sport_db0.activity
+        set
+            join_num = join_num + 1,
+            hot_value = hot_value + join_num * 50
+        where id = #{at_server_id};
+
+        insert into
+            sport_db0.user_join_activity(
+            activity_id,
+            user_id
+            )
+        values(
+            #{activity_id},
+            #{user_id}
+            );
+    </update>
+
+    <select id="getJoinerInfo" resultType="com.tcl.work.sport.model.JoinUser" parameterType="int">
+        select
+            id, name, image_url, im_uid
+        from
+            sport_db0.user
+        where
+            id in
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </select>
+
+    <update id="updateStatusToDone" >
+        update sport_db0.activity
+        set
+            status = 2
+        where
+            DATEDIFF(sysdate(), end_time) > 0
     </update>
 </mapper>

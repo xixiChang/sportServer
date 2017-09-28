@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Pattern;
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,12 +13,13 @@ public class Record {
 
     private int id;
     private int user_id;
+    private String session;
 
     /**
      * (yyyy-MM-dd)
      */
     @NotEmpty(message = "date is null")
-    private Date date;
+    private String date;
 
     /**
      * (HH:mm:ss)
@@ -40,9 +42,9 @@ public class Record {
     private int spent_time; //s
 
     @NotEmpty(message = "start_time is null")
-    private Time start_time; //HH:mm:ss
+    private String start_time; //HH:mm:ss
     @NotEmpty(message = "end_time is null")
-    private Time end_time; //HH:mm:ss
+    private String end_time; //HH:mm:ss
 
     public int getId() {
         return id;
@@ -53,11 +55,19 @@ public class Record {
     }
 
     public String getDate() {
-        return simpleDateFormat.format(date);
+        return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getSession() {
+        return session;
+    }
+
+    public void setSession(String session) {
+        this.session = session;
     }
 
     public String getTime() {
@@ -116,19 +126,35 @@ public class Record {
         this.spent_time = spent_time;
     }
 
-    public Time getStart_time() {
+    public String getStart_time() {
         return start_time;
     }
 
-    public void setStart_time(Time start_time) {
+    public void setStart_time(String start_time) {
         this.start_time = start_time;
     }
 
-    public Time getEnd_time() {
+    public String getEnd_time() {
         return end_time;
     }
 
-    public void setEnd_time(Time end_time) {
+    public void setEnd_time(String end_time) {
         this.end_time = end_time;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Record:[user_id=" + user_id + ", date=" + date + ", time=" + time + ", type=" + type
+                +", step=" + step + ", start_time=" + start_time + ", end_time=" + end_time
+                +", spent_time=" + spent_time + ", calorie=" + calorie + ", mean_speed=" + mean_speed
+                +", distance=" + distance +"]";
     }
 }
