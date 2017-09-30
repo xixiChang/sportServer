@@ -47,7 +47,7 @@
 
     <select id="getDetails" parameterType="int"  resultType="com.tcl.work.sport.model.Activity">
         select
-         *
+            *, id as at_server_id
         from
          sport_db0.activity
         where id = #{at_server_id};
@@ -73,12 +73,13 @@
             start_time,
             end_time,
             status,
-            id as at_server_id,
+            a.id as at_server_id,
             hot_value,
+            join_num,
             post_time
         from
             sport_db0.activity a
-        left join sport_db0.user_join_activity j
+        inner join sport_db0.user_join_activity j
             on a.id = j.activity_id
         where
             j.user_id = #{user_id};
@@ -101,6 +102,30 @@
         where status &lt; 2;
     </select>
 
+
+
+    <select id="getAllByPage" parameterType="int" resultType="com.tcl.work.sport.model.ActivityBriefInfo">
+        select
+            image_url,
+            publish_user_id,
+            name,
+            start_time,
+            end_time,
+            status,
+            id as at_server_id,
+            hot_value,
+            post_time
+        from
+            sport_db0.activity
+        where
+            status &lt; 2
+        limit
+            4
+        OFFSET
+            #{current_size};
+
+    </select>
+
     <update id="joinActivity" parameterType="map">
         update sport_db0.activity
         set
@@ -114,7 +139,7 @@
             user_id
             )
         values(
-            #{activity_id},
+            #{at_server_id},
             #{user_id}
             );
     </update>

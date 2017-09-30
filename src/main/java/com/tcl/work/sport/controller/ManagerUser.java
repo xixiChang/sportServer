@@ -1,6 +1,8 @@
 package com.tcl.work.sport.controller;
 
+import com.sun.org.apache.regexp.internal.RE;
 import com.tcl.work.sport.constant.Constant;
+import com.tcl.work.sport.controller.Filed.FiledUpdateUser;
 import com.tcl.work.sport.controller.Filed.FiledUserRegister;
 import com.tcl.work.sport.mapper.UserMapper;
 import com.tcl.work.sport.model.AuthCode;
@@ -11,10 +13,13 @@ import com.tcl.work.sport.thirdparty.IMRegister;
 import com.tcl.work.sport.utils.Base64;
 import com.tcl.work.sport.utils.GetString;
 import com.tcl.work.sport.utils.SHA1;
+import com.tcl.work.sport.utils.StringUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -32,14 +37,12 @@ public class ManagerUser {
     @Autowired
     private UserMapper userMapper;
 
-//    @Autowired
-//    private IntRequestImpl request;
 
     private IMRegister imRegister = new IMRegister();
 
     private SendSMSCode sendSMSCode = new SendSMSCode();
 
-    @RequestMapping(value = "/login")
+    @RequestMapping(path = "/login")
     public ResponseResult userLogin(User user) {
         ResponseResult result = new ResponseResult();
         if (user.getPhone() == null || user.getPassword() == null) {
@@ -61,7 +64,7 @@ public class ManagerUser {
         return result;
     }
 
-    @RequestMapping(value = "/register")
+    @RequestMapping(path = "/register")
     public ResponseResult userRegister(@Valid FiledUserRegister info, BindingResult binding) {
         ResponseResult result = new ResponseResult();
         if (binding.hasErrors()) {
@@ -69,18 +72,17 @@ public class ManagerUser {
             return result;
         }
 
-        System.out.println("register>>>" + info.getPassword());
         AuthCode authCode = codes.get(info.getPhone());
-        if (authCode == null){
+        if (authCode == null) {
             result.setMsg("手机号不正确");
             return result;
         }
-        if (authCode.isTimeOut()){
+        if (authCode.isTimeOut()) {
             result.setMsg("验证码已超时,请重新获取");
             return result;
         }
 
-        if (!authCode.isRight(info.getCode())){
+        if (!authCode.isRight(info.getCode())) {
             result.setMsg("验证码错误");
             return result;
         }
@@ -103,7 +105,7 @@ public class ManagerUser {
         return result;
     }
 
-    @RequestMapping(value = "/getauthcode")
+    @RequestMapping(path = "/getauthcode")
     public ResponseResult userGetAuthCode(String phone) {
 
         System.out.println("getauthcode>>>" + phone);
@@ -118,5 +120,43 @@ public class ManagerUser {
 
         result.setStatus(OK);
         return result;
+    }
+
+    @RequestMapping(path = "/getuserinfo")
+    public ResponseResult getUserInfo(@RequestParam("user_id") String user_id) {
+        ResponseResult responseResult = new ResponseResult();
+        User user = userMapper.getInfo(Integer.parseInt(user_id));
+        if (user.getId() != 0) {
+            responseResult.setResult(user);
+            responseResult.setStatus(OK);
+            responseResult.setType("getuserinfo");
+        } else {
+            responseResult.setMsg("not found user");
+        }
+        return responseResult;
+    }
+
+    @RequestMapping(path = "/modifyInfo")
+    public ResponseResult updateUser(@RequestBody @Valid FiledUpdateUser user,
+                                     BindingResult binding) {
+        ResponseResult responseResult = new ResponseResult();
+        if (binding.hasErrors()) {
+            responseResult.setMsg(GetString.errorInfo(binding.getAllErrors()));
+            return responseResult;
+        }
+        if (userMapper.updateUser(user) > 0) {
+            responseResult.setStatus(OK);
+            imUpdate(user);
+            return responseResult;
+        } else {
+            responseResult.setMsg("更新失败,请重试");
+        }
+        return responseResult;
+    }
+
+
+    private void imUpdate(FiledUpdateUser user) {
+        User localUser = userMapper.getInfo(user.getUser_id());
+        imRegister.imUserUpdate(localUser);
     }
 }

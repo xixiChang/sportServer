@@ -46,4 +46,40 @@
         WHERE phone = #{phone}
     </select>
 
+    <select id="getInfo" resultType="com.tcl.work.sport.model.User" parameterType="int">
+        select
+            id,
+            name,
+            image_url,
+            im_uid,
+            retain
+        from
+            sport_db0.user
+        where
+            id = #{user_id};
+    </select>
+
+    <update id="updateUser" parameterType="com.tcl.work.sport.controller.Filed.FiledUpdateUser">
+        update
+            sport_db0.user
+        set
+            image_url = #{image_url},
+            name = #{name},
+            retain = #{retain}
+        where
+            id = #{user_id};
+
+    </update>
+
+
+    <select id="getUserAll" parameterType="int" resultType="com.tcl.work.sport.model.User">
+        select
+            *
+        from
+            sport_db0.user
+        where
+            id = #{user_id};
+    </select>
+
+
 </mapper> 

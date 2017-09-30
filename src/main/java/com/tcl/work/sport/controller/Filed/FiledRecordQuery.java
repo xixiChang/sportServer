@@ -17,6 +17,7 @@ public class FiledRecordQuery {
     message = "date not current")
     private Date date;
     private int id;
+    private int u_id;
 
     public int getUser_id() {
         return user_id;
@@ -52,5 +53,14 @@ public class FiledRecordQuery {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+
+    public int getU_id() {
+        return u_id;
+    }
+
+    public void setU_id(int u_id) {
+        this.u_id = u_id;
     }
 }

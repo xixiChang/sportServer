@@ -24,7 +24,7 @@ public class Activity {
     private String id;//不发送至客户端
 
     @NotBlank(message = "user_id is empty")
-    private String user_id;
+        private String user_id;
 
     @NotBlank(message = "image_url is empty")
     private String image_url;//主题图片url

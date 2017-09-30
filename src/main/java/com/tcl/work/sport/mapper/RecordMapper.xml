@@ -130,4 +130,17 @@
           step
         DESC
     </select>
+
+
+    <select id="getSBTypeSum" parameterType="int" resultType="map">
+        select
+            type, sum(distance) AS distance
+        from
+            sport_db0.record
+        where
+            user_id = #{user_id}
+        GROUP BY
+            type
+    </select>
+
 </mapper>

@@ -1,5 +1,6 @@
 package com.tcl.work.sport;
 
+import com.tcl.work.sport.conf.AuthInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
@@ -27,4 +28,10 @@ public class App {
             }
         };
     }
+
+    @Bean
+    public AuthInterceptor authInterceptor(){
+        return new AuthInterceptor();
+    }
+
 }

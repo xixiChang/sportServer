@@ -11,6 +11,7 @@ public class ActivityBriefInfo {
     private String at_server_id;
     private String hot_value;
     private String post_time;
+    private String join_num;
 
     public String getImage_url() {
         return image_url;
@@ -82,5 +83,13 @@ public class ActivityBriefInfo {
 
     public void setPost_time(String post_time) {
         this.post_time = post_time;
+    }
+
+    public String getJoin_num() {
+        return join_num;
+    }
+
+    public void setJoin_num(String join_num) {
+        this.join_num = join_num;
     }
 }

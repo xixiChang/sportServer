@@ -28,7 +28,6 @@ public class IMRegister {
 
 
     public void imUserRegister(User user){
-
         OpenimUsersAddRequest req = new OpenimUsersAddRequest();
         List<Userinfos> list = new ArrayList<Userinfos>();
         Userinfos obj = new Userinfos();
@@ -49,15 +48,13 @@ public class IMRegister {
     }
 
     public void imUserUpdate(User user){
-
         OpenimUsersUpdateRequest  req = new OpenimUsersUpdateRequest();
         List<Userinfos> list = new ArrayList<Userinfos>();
         Userinfos obj = new Userinfos();
         obj.setName(user.getName());
-        obj.setPassword(SHA1.encode(user.getPassword()));
         obj.setIconUrl(user.getImage_url());
-        obj.setUserid(user.getIm_uid());
         obj.setNick(user.getName());
+        obj.setUserid(user.getIm_uid());
         list.add(obj);
         req.setUserinfos(list);
         try {

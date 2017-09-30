@@ -36,10 +36,11 @@ public class ActivityManager {
         }
         if (activityMapper.addActivity(activity) > 0) {
             Map<String, String> map = new HashMap<>();
-            map.put("activity_id", activity.getId());
+            map.put("at_server_id", activity.getId());
             map.put("user_id", activity.getUser_id());
 
             activityMapper.joinActivity(map);
+            responseResult.setResult(activity.getId());
             responseResult.setStatus(OK);
         }
         return responseResult;
@@ -55,6 +56,7 @@ public class ActivityManager {
         }
         if (activityMapper.updateActivityTime(activityDelay) > 0) {
             responseResult.setStatus(OK);
+            responseResult.setType("delay");
         }
         return responseResult;
     }
@@ -68,10 +70,9 @@ public class ActivityManager {
         map.put("reason", reason);
         map.put("at_server_id", at_server_id);
 
-        if (activityMapper.cancelActivity(map) > 0) {
+        if (activityMapper.cancelActivity(map) > 0)
             responseResult.setStatus(OK);
-        }
-
+        responseResult.setType("cancel");
         return responseResult;
     }
 
@@ -85,6 +86,7 @@ public class ActivityManager {
             activity.setJoiner(joiners.toString());
         responseResult.setResult(activity);
         responseResult.setStatus(OK);
+        responseResult.setType("details");
         return responseResult;
     }
 
@@ -93,6 +95,7 @@ public class ActivityManager {
         ResponseResult responseResult = new ResponseResult();
         responseResult.setResult(activityMapper.getListForSB(user_id));
         responseResult.setStatus(OK);
+        responseResult.setType("getMyActivity");
         return responseResult;
     }
 
@@ -104,8 +107,10 @@ public class ActivityManager {
         map.put("at_server_id", at_server_id);
         map.put("user_id", user_id);
 
-        if (activityMapper.joinActivity(map) > 0)
+        if (activityMapper.joinActivity(map) > 0) {
+            responseResult.setType("join");
             responseResult.setStatus(OK);
+        }
         return responseResult;
     }
 
@@ -117,13 +122,28 @@ public class ActivityManager {
         return responseResult;
     }
 
+    @PostMapping(path = "/allByPage")
+    public ResponseResult getAllByPage(@RequestParam(name = "current_size") int current_size) {
+        ResponseResult responseResult = new ResponseResult();
+        responseResult.setResult(activityMapper.getAllByPage(current_size));
+        if (current_size == 0) {
+            responseResult.setType("onRefresh");
+        } else if (current_size > 0) {
+            responseResult.setType("onLoadMore");
+        }
+
+        responseResult.setStatus(OK);
+        return responseResult;
+    }
+
     @PostMapping(path = "/getJoinerInfo")
-    public ResponseResult getJoinerInfo(@RequestParam("userIdList")List<Integer> list){
+    public ResponseResult getJoinerInfo(@RequestBody List<Integer> list) {
         ResponseResult responseResult = new ResponseResult();
         if (list.isEmpty())
             return responseResult;
         responseResult.setResult(activityMapper.getJoinerInfo(list));
         responseResult.setStatus(OK);
+        responseResult.setType("getJoinerInfo");
         return responseResult;
     }
 

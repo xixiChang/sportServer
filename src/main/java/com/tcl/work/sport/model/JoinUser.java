@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JoinUser {
     int id;
-    int image_url;
+    String image_url;
     String name;
     String im_uid;
 
@@ -17,12 +17,12 @@ public class JoinUser {
         this.id = id;
     }
 
-    public int getImage_url() {
-        return image_url;
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
-    public void setImage_url(int image_url) {
-        this.image_url = image_url;
+    public String getImage_url() {
+        return image_url;
     }
 
     public String getName() {

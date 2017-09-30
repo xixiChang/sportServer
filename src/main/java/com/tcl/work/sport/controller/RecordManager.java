@@ -52,7 +52,7 @@ public class RecordManager {
             responseResult.setType(filed.getType());
         switch (cmd){
             case "sum":
-                responseResult.setResult(recordMapper.getRecordSUM(filed.getUser_id()));
+                responseResult.setResult(recordMapper.getRecordSUM(filed.getU_id()));
                 responseResult.setStatus(OK);
                 break;
             case "month":
@@ -86,6 +86,17 @@ public class RecordManager {
                 map_d.put("user_id", filed.getUser_id());
                 map_d.put("type", filed.getType());
                 responseResult.setResult(recordMapper.getRecordMaxForDay(map_d));
+                responseResult.setStatus(OK);
+                break;
+
+            case "gettypesum":
+                List<Map<String, String>> mapList =  recordMapper.getSBTypeSum(filed.getUser_id());
+                Map<String, String> result = new HashMap<>();
+                for (Map<String, String> m : mapList){
+                    if (m.get("type") != null)
+                        result.put( m.get("type"), m.get("distance"));
+                }
+                responseResult.setResult(result);
                 responseResult.setStatus(OK);
                 break;
             default:

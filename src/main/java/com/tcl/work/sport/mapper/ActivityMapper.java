@@ -30,6 +30,8 @@ public interface ActivityMapper {
 
     List<ActivityBriefInfo> getAllActivity();
 
+    List<ActivityBriefInfo> getAllByPage(int current_size);
+
     int joinActivity(Map<String, String> map);
 
     List<JoinUser> getJoinerInfo(List<Integer> userList);
