@@ -2,6 +2,7 @@ package com.tcl.work.sport.controller;
 
 import com.tcl.work.sport.controller.Filed.FiledRecordQuery;
 import com.tcl.work.sport.mapper.RecordMapper;
+import com.tcl.work.sport.mapper.UserMapper;
 import com.tcl.work.sport.model.Record;
 import com.tcl.work.sport.model.ResponseResult;
 import com.tcl.work.sport.utils.GetString;
@@ -29,6 +30,9 @@ public class RecordManager {
 
     @Autowired
     private RecordMapper recordMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @RequestMapping(path = "/upload")
     public ResponseResult uploadRecord(@RequestBody @Valid Record record,
@@ -89,14 +93,20 @@ public class RecordManager {
                 responseResult.setStatus(OK);
                 break;
 
-            case "gettypesum":
-                List<Map<String, String>> mapList =  recordMapper.getSBTypeSum(filed.getUser_id());
-                Map<String, String> result = new HashMap<>();
-                for (Map<String, String> m : mapList){
+            case "gettypesumall":
+                List<Map<String, String>> mapList0 =  recordMapper.getSBTypeSumForAll(filed.getUser_id());
+                Map<String, String> result0 = new HashMap<>();
+                for (Map<String, String> m : mapList0){
                     if (m.get("type") != null)
-                        result.put( m.get("type"), m.get("distance"));
+                        result0.put( m.get("type"), m.get("distance"));
                 }
-                responseResult.setResult(result);
+                responseResult.setResult(result0);
+                responseResult.setStatus(OK);
+                break;
+
+            case "gettypesumforday":
+                List<Map<String, String>> mapList =  recordMapper.getSBTypeSumForDay(filed.getUser_id());
+                responseResult.setResult(mapList);
                 responseResult.setStatus(OK);
                 break;
             default:
@@ -109,12 +119,12 @@ public class RecordManager {
 
     @RequestMapping(path = "/rating")
     public ResponseResult rating(@RequestParam("user_id") String user_id){
-        List<Integer> friendList = new ArrayList<>();
-        friendList.add(28);
-        friendList.add(29);
-        friendList.add(30);
-        friendList.add(31);
 
+        List<Integer> friendList = userMapper.getAllUserId();
+
+        /**
+         * add friend table
+         **/
         ResponseResult responseResult = new ResponseResult();
         responseResult.setResult(recordMapper.getRating(friendList));
         responseResult.setStatus(OK);

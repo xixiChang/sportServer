@@ -82,4 +82,12 @@
     </select>
 
 
+    <select id="getAllUserId" resultType="int">
+        select
+            id
+        from
+            sport_db0.user;
+    </select>
+
+
 </mapper> 

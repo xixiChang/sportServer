@@ -132,13 +132,27 @@
     </select>
 
 
-    <select id="getSBTypeSum" parameterType="int" resultType="map">
+    <select id="getSBTypeSumForAll" parameterType="int" resultType="map">
         select
             type, sum(distance) AS distance
         from
             sport_db0.record
         where
             user_id = #{user_id}
+        GROUP BY
+            type
+    </select>
+
+
+    <select id="getSBTypeSumForDay" parameterType="int" resultType="map">
+        select
+            type, sum(distance) AS distance, spent_time
+        from
+            sport_db0.record
+        where
+            user_id = #{user_id}
+        AND
+            date = current_date
         GROUP BY
             type
     </select>

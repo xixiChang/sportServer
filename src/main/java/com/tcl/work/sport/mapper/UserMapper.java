@@ -22,4 +22,6 @@ public interface UserMapper {
 
     @Deprecated
     User getUserAll(int user_id);
+
+    List<Integer> getAllUserId();
 }

@@ -8,6 +8,7 @@ public class JoinUser {
     String image_url;
     String name;
     String im_uid;
+    String retain;
 
     public int getId() {
         return id;
@@ -39,5 +40,13 @@ public class JoinUser {
 
     public void setIm_uid(String im_uid) {
         this.im_uid = im_uid;
+    }
+
+    public String getRetain() {
+        return retain;
+    }
+
+    public void setRetain(String retain) {
+        this.retain = retain;
     }
 }

@@ -31,6 +31,8 @@ public interface RecordMapper {
 
     List<RateItem> getRating(List<Integer> user_id);
 
-    List<Map<String, String>> getSBTypeSum(int user_id);
+    List<Map<String, String>> getSBTypeSumForAll(int user_id);
+
+    List<Map<String, String>> getSBTypeSumForDay(int user_id);
 
 }

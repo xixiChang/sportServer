@@ -1,6 +1,5 @@
 package com.tcl.work.sport.controller;
 
-import com.sun.org.apache.regexp.internal.RE;
 import com.tcl.work.sport.constant.Constant;
 import com.tcl.work.sport.controller.Filed.FiledUpdateUser;
 import com.tcl.work.sport.controller.Filed.FiledUserRegister;
@@ -107,14 +106,23 @@ public class ManagerUser {
 
     @RequestMapping(path = "/getauthcode")
     public ResponseResult userGetAuthCode(String phone) {
-
-        System.out.println("getauthcode>>>" + phone);
         ResponseResult result = new ResponseResult();
+        if (StringUtil.isEmpty(phone)) {
+            result.setMsg("phone is null");
+            return result;
+        }
+
+        if (!phone.matches("^(0|86|17951)?(13[0-9]|15[012356789]|16[6]|17[12345678]|18[0-9]|14[56789]|19[89])[0-9]{8}$")) {
+            result.setMsg("phone is incorrect");
+            return result;
+        }
+
         if (userMapper.checkPhone(phone) > 0) {
             result.setMsg("phone has been registered");
             return result;
         }
-        String randomNum = String.valueOf((int) (Math.random() * 9999));
+        int tempNum = (int) (Math.random() * 9999);
+        String randomNum = String.valueOf(tempNum < 1000 ? tempNum + 1000 : tempNum);
         sendSMSCode.sendSms(phone, randomNum);
         codes.put(phone, new AuthCode(randomNum, new Date().getTime()));
 
