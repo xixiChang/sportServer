@@ -120,7 +120,7 @@
         where
             status &lt; 2
         limit
-            4
+            6
         OFFSET
             #{current_size};
 

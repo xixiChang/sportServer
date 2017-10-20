@@ -86,6 +86,10 @@ public class ManagerUser {
             return result;
         }
 
+        if (userMapper.checkPhone(info.getPhone()) > 0) {
+            result.setMsg("phone has been registered");
+            return result;
+        }
         String uid = String.valueOf(new Date().getTime());
 
         User user = new User();

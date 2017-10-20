@@ -56,7 +56,8 @@ public class RecordManager {
             responseResult.setType(filed.getType());
         switch (cmd){
             case "sum":
-                responseResult.setResult(recordMapper.getRecordSUM(filed.getU_id()));
+                Map<String, String> mapS = recordMapper.getRecordSUM(filed.getUser_id());
+                responseResult.setResult(mapS);
                 responseResult.setStatus(OK);
                 break;
             case "month":

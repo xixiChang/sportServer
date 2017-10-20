@@ -55,11 +55,19 @@
 
     <select id="getRecordMax" parameterType="map" resultType="map">
         SELECT
-          id, user_id, MAX(step) AS step, spent_time, distance, calorie
+          id, user_id, step, spent_time, distance, calorie
         FROM
           sport_db0.record
         WHERE
-          type = #{type} AND user_id = #{user_id}
+            step = (
+                select
+                    MAX(step)
+                from
+                    sport_db0.record
+                where
+                    type = #{type}
+                    AND
+                    user_id = #{user_id})
         LIMIT 1;
     </select>
 
@@ -100,7 +108,9 @@
 
     <select id="getRecordSUM" parameterType="int" resultType="map">
         SELECT
-          sum(step) AS step, sum(distance) AS distance, sum(spent_time) AS spent_time,
+          sum(step) AS step,
+          sum(distance) AS distance,
+          sum(spent_time) AS spent_time,
           sum(calorie) AS calorie
         FROM
           sport_db0.record

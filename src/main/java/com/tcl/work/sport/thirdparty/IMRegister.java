@@ -32,7 +32,6 @@ public class IMRegister {
         List<Userinfos> list = new ArrayList<Userinfos>();
         Userinfos obj = new Userinfos();
         obj.setName(user.getName());
-        logger.debug("session>>>>" + user.getSession());
         obj.setPassword(user.getSession());
         obj.setIconUrl(user.getImage_url());
         obj.setUserid(user.getIm_uid());

@@ -14,7 +14,7 @@ public class Constant {
     /**
      * user
      */
-    public final static String USER_DEFAULT_IMAGE_URL = "https://img1.doubanio.com/view/site/large/public/5c5b6238cffb4ab.jpg";
+    public final static String USER_DEFAULT_IMAGE_URL = "http://119.29.95.86/app_head_default.png";
 
     /**
      *　融云app-key、app-secret、token_url

@@ -32,12 +32,16 @@
     <select id="checkUser" resultType="com.tcl.work.sport.model.User" parameterType="com.tcl.work.sport.model.User">
         SELECT id,
           name,
-         session,
-         image_url,
-         im_uid
-        FROM sport_db0.user
-        WHERE phone = #{phone}
-        AND password = #{password}
+          session,
+          image_url,
+          im_uid,
+          retain
+        FROM
+          sport_db0.user
+        WHERE
+          phone = #{phone}
+        AND
+          password = #{password}
     </select>
 
     <select id="checkPhone" resultType="int" parameterType="string">

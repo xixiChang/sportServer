@@ -63,9 +63,7 @@ public class FileUploader {
         responseResult.setStatus(OK);
         responseResult.setMsg(Msg);
         responseResult.setType(des);
-        /**
-         * not real image url!
-         */
+
         responseResult.setResult(apachePath + des + File.separator + name);
 
         return responseResult;
